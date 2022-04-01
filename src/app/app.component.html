@@ -1,0 +1,167 @@
+<div class="container">
+    <div class="card mt-2" style="align-items: center;">
+        <h2>Student Dashboard</h2>
+    </div>
+    <div class="card mt-2" style="padding: 5px;">
+        <form [formGroup]="exform" #registerForm="ngForm">
+            <div class="form-group">
+                <label for="studentName">Student Name : </label>
+                <input formControlName="studentName" type="text" name="studentName" id="studentName"
+                    class="form-control">
+                <small *ngIf="exform.get('studentName')?.invalid && exform.get('studentName')?.touched"
+                    class="text-danger">Name is Required - Minimum 3 Chars.</small>
+            </div>
+            <div class="form-group">
+                <label for="studentEmail">Student Email : </label>
+                <input type="text" formControlName="studentEmail" name="studentEmail" id="studentEmail" class="form-control">
+                <small *ngIf="exform.get('studentEmail')?.invalid && exform.get('studentEmail')?.touched"
+                    class="text-danger">Email is required.</small>
+            </div>
+            <div class="form-group">
+                <label for="studentRollNumber">Student RollNumber : </label>
+                <input type="text" formControlName="studentRollNumber" name="studentRollNumber" id="studentRollNumber" class="form-control">
+                <small *ngIf="exform.get('studentRollNumber')?.invalid && exform.get('studentRollNumber')?.touched"
+                    class="text-danger">Roll Number is required.</small>
+            </div>
+            <div class="form-group">
+                <label for="studentPercentage">Student Percentage : </label>
+                <input type="text" formControlName="studentPercentage" name="studentPercentage" id="studentPercentage" class="form-control">
+                <small *ngIf="exform.get('studentPercentage')?.invalid && exform.get('studentPercentage')?.touched"
+                    class="text-danger">Percentage is required.</small>
+            </div>
+            <div class="form-group">
+                <label for="studentAddress">Student Address : </label>
+                <input type="text" formControlName="studentAddress" name="studentAddress" id="studentAddress" class="form-control">
+                <small *ngIf="exform.get('studentAddress')?.invalid && exform.get('studentAddress')?.touched"
+                class="text-danger">Address is required.</small>
+            </div>
+            <div class="form-group">
+                <!--<input type="submit" value="Register" class="btn btn-primary">-->
+                <button (click)="studentRegistration(registerForm)" [disabled]="exform.invalid" class="btn btn-primary">Register</button>
+                &nbsp;
+                <input type="reset" value="Clear" class="btn btn-danger">
+            </div>
+        </form>
+    </div>
+
+    <!-- alert success and Error-->
+    <div *ngIf="successAlert" class="alert alert-success alert-dismissible fade show mt-2"  role="alert">
+        <strong>Success</strong> Student Successfully Registered.
+        <button (click)="closeSuccessAlert()" type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div *ngIf="deleteAlert" class="alert alert-danger alert-dismissible fade show mt-2"  role="alert">
+        <strong>Success</strong> Student Deletion Successful.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+    <div class="mt-3">
+        <table class="table table-bordered">
+            <thead class="thead">
+                <tr>
+                    <th>Student Name</th>
+                    <th>Student Email</th>
+                    <th>Student Roll Num</th>
+                    <th>Student Percentage</th>
+                    <th>Student Address</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                <tr *ngFor= "let stuDetails of studentDetails">
+                    <td>{{ stuDetails.studentName }}</td>
+                    <td>{{ stuDetails.studentEmail }}</td>
+                    <td>{{ stuDetails.studentRollNumber }}</td>
+                    <td>{{ stuDetails.studentPercentage }}</td>
+                    <td>{{ stuDetails.studentAddress }}</td>
+                    <td><button class="btn btn-info" data-toggle="modal" data-target="#exampleModal" (click)="editStudent(stuDetails)">Edit</button></td>
+                    <td><button class="btn btn-danger" (click)="deleteStudent(stuDetails.studentId)">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="exform" #editForm="ngForm">
+                <div class="form-group">
+                    <label for="studentName">Student Name : </label>
+                    <input formControlName="studentName"  [(ngModel)]="studentToUpdate.studentName" type="text" name="studentName" id="studentName"
+                        class="form-control">
+                    <small *ngIf="exform.get('studentName')?.invalid && exform.get('studentName')?.touched"
+                        class="text-danger">Name is Required - Minimum 3 Chars.</small>
+                </div>
+                <div class="form-group">
+                    <label for="studentEmail">Student Email : </label>
+                    <input type="text" formControlName="studentEmail" [(ngModel)]="studentToUpdate.studentEmail" name="studentEmail" id="studentEmail" class="form-control">
+                    <small *ngIf="exform.get('studentEmail')?.invalid && exform.get('studentEmail')?.touched"
+                        class="text-danger">Email is required.</small>
+                </div>
+                <div class="form-group">
+                    <label for="studentRollNumber">Student RollNumber : </label>
+                    <input type="text" formControlName="studentRollNumber" [(ngModel)]="studentToUpdate.studentRollNumber" name="studentRollNumber" id="studentRollNumber" class="form-control">
+                    <small *ngIf="exform.get('studentRollNumber')?.invalid && exform.get('studentRollNumber')?.touched"
+                        class="text-danger">Roll Number is required.</small>
+                </div>
+                <div class="form-group">
+                    <label for="studentPercentage">Student Percentage : </label>
+                    <input type="text" formControlName="studentPercentage" [(ngModel)]="studentToUpdate.studentPercentage" name="studentPercentage" id="studentPercentage" class="form-control">
+                    <small *ngIf="exform.get('studentPercentage')?.invalid && exform.get('studentPercentage')?.touched"
+                        class="text-danger">Percentage is required.</small>
+                </div>
+                <div class="form-group">
+                    <label for="studentAddress">Student Address : </label>
+                    <input type="text" formControlName="studentAddress" [(ngModel)]="studentToUpdate.studentAddress" name="studentAddress" id="studentAddress" class="form-control">
+                    <small *ngIf="exform.get('studentAddress')?.invalid && exform.get('studentAddress')?.touched"
+                    class="text-danger">Address is required.</small>
+                </div>
+                <div class="form-group">
+                    <!--<input type="submit" value="Register" class="btn btn-primary">-->
+                    <button (click)="editStudent(editForm)" [disabled]="exform.invalid" class="btn btn-primary">Edit</button>
+                    &nbsp;
+                    <input type="reset" value="Clear" class="btn btn-danger">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>  
+  <!-- Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<router-outlet></router-outlet>
